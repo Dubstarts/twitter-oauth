@@ -82,9 +82,10 @@ public class TwitterLoginButton extends Button {
 		public void onClick(View v) {
 
 			if (twitter.isSessionValid()) {
-				Log.d(TAG, "Session valid: disconnection");
-				TwitterSessionStore.clear(twitter, getContext());
-				listener.onLogoutSucceed();
+				Log.d(TAG, "Session valid: Already logged in");
+				//TwitterSessionStore.clear(twitter, getContext());
+				//listener.onLogoutSucceed();
+				sessionListener.onAccessTokenRetrieved();
 			} else {
 				Log.d(TAG, "Session not valid: connection");
 				twitter.getAuthorizeUrl(sessionListener);
