@@ -45,7 +45,7 @@ public class TwitterAuth {
 	private static final String REQUEST_TOKEN_URL = "https://twitter.com/oauth/request_token";
 	private static final String ACCESS_TOKEN_URL = "https://twitter.com/oauth/access_token";
 	private static final String AUTHORIZE_URL = "https://twitter.com/oauth/authorize";
-	private static final String CALLBACK_URL = "tlb:///myApp";
+	private static final String CALLBACK_URL = "x-oauthflow-twitter://callback";
 
 	private String token;
 	private String tokenSecret;
@@ -70,6 +70,8 @@ public class TwitterAuth {
 		Log.d(TAG, consumerKey +" " + consumerSecret);
 		consumer = new CommonsHttpOAuthConsumer(consumerKey, consumerSecret);
 		provider = new CommonsHttpOAuthProvider(REQUEST_TOKEN_URL, ACCESS_TOKEN_URL, AUTHORIZE_URL);
+		//Now that's really important. Because you don't perform the retrieveRequestToken method at this moment, the OAuth method is not detected automatically (there is no communication with Twitter). So, the default is 1.0 which is wrong because the initial request was performed with 1.0a.
+		provider.setOAuth10a(true);
 	}
 
 	public String getToken() {
@@ -93,12 +95,13 @@ public class TwitterAuth {
 			@Override
 			public void run() {
 				try {
-					String url = provider.retrieveRequestToken(consumer, CALLBACK_URL);
+					String url = provider.retrieveRequestToken(consumer, callback_url);
 					callback.onAuthorizeUrlRetrieved(url);
 				} catch (OAuthMessageSignerException e) {
 					Log.e(TAG, e.getMessage(), e.getCause());
 					callback.onError(e.getMessage());
 				} catch (OAuthNotAuthorizedException e) {
+					e.printStackTrace();
 					Log.e(TAG, e.getMessage(), e.getCause());
 					callback.onError(e.getMessage());
 				} catch (OAuthExpectationFailedException e) {
