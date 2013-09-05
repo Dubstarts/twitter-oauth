@@ -123,7 +123,7 @@ public class TwitterLoginButton extends Button {
 				@Override
 				public void run() {
 					TwitterSessionStore.save(twitter, getContext());
-					listener.onAuthSucceed();
+					listener.onAuthSucceed(twitter);
 				}
 			});
 		}

@@ -49,11 +49,14 @@ public class TwitterAuth {
 
 	private String token;
 	private String tokenSecret;
+	private String userId;
 	private String callback_url = CALLBACK_URL;
 
 	private CommonsHttpOAuthConsumer consumer;
 	private CommonsHttpOAuthProvider provider;
-
+	//private CommonsHttpOAuthConsumer commonHttpOAuthConsumer;
+	//private OAuthProvider authProvider;
+	  
 	/***
 	 * Create a new Twitter object Go to https://dev.twitter.com/ to get a
 	 * consumer key and a consumer secret
@@ -88,6 +91,15 @@ public class TwitterAuth {
 
 	protected void setTokenSecret(String tokenSecret) {
 		this.tokenSecret = tokenSecret;
+	}
+	
+
+	protected void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
+	public String getUserId() {
+		return this.userId;
 	}
 
 	protected void getAuthorizeUrl(final SessionListener callback) {
@@ -125,7 +137,8 @@ public class TwitterAuth {
 					provider.retrieveAccessToken(consumer, _oauthVerifier);
 					setToken(consumer.getToken());
 					setTokenSecret(consumer.getTokenSecret());
-					
+					setUserId(consumer.getToken().split("-")[0]);
+
 					callback.onAccessTokenRetrieved();
 				} catch (OAuthMessageSignerException e) {
 					Log.e(TAG, e.getMessage(), e.getCause());
@@ -173,7 +186,7 @@ public class TwitterAuth {
 	}
 
 	public static interface AuthListener {
-		public void onAuthSucceed();
+		public void onAuthSucceed(TwitterAuth ta);
 
 		public void onLogoutSucceed();
 
