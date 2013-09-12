@@ -32,6 +32,7 @@ public class TwitterSessionStore {
 	private static final String TOKEN = "token";
 	private static final String TOKEN_SECRET = "tokenSecret";
 	private static final String KEY = "twitter-session";
+	private static final String UUID = "userId";
 
 	/***
 	 * Save the Token and Token Secret
@@ -47,6 +48,7 @@ public class TwitterSessionStore {
 				.edit();
 		editor.putString(TOKEN, session.getToken());
 		editor.putString(TOKEN_SECRET, session.getTokenSecret());
+		editor.putString(UUID, session.getUserId());
 		return editor.commit();
 	}
 
@@ -64,6 +66,7 @@ public class TwitterSessionStore {
 				Context.MODE_PRIVATE);
 		session.setToken(savedSession.getString(TOKEN, null));
 		session.setTokenSecret(savedSession.getString(TOKEN_SECRET, null));
+		session.setUserId(savedSession.getString(UUID, null));
 		return session.isSessionValid();
 	}
 
@@ -76,11 +79,11 @@ public class TwitterSessionStore {
 	public static void clear(TwitterAuth session, Context context) {
 		session.setToken(null);
 		session.setTokenSecret(null);
-
+		session.setUserId(null);
+		
 		Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE)
 				.edit();
 		editor.clear();
 		editor.commit();
 	}
-
 }
