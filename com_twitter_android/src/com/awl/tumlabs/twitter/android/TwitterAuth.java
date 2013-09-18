@@ -73,7 +73,9 @@ public class TwitterAuth {
 		Log.d(TAG, consumerKey +" " + consumerSecret);
 		consumer = new CommonsHttpOAuthConsumer(consumerKey, consumerSecret);
 		provider = new CommonsHttpOAuthProvider(REQUEST_TOKEN_URL, ACCESS_TOKEN_URL, AUTHORIZE_URL);
-		//Now that's really important. Because you don't perform the retrieveRequestToken method at this moment, the OAuth method is not detected automatically (there is no communication with Twitter). So, the default is 1.0 which is wrong because the initial request was performed with 1.0a.
+		//Now that's really important. Because you don't perform the retrieveRequestToken method at this moment, the 
+		// OAuth method is not detected automatically (there is no communication with Twitter). 
+		// So, the default is 1.0 which is wrong because the initial request was performed with 1.0a.
 		provider.setOAuth10a(true);
 	}
 
@@ -122,6 +124,9 @@ public class TwitterAuth {
 				} catch (OAuthCommunicationException e) {
 					Log.e(TAG, e.getMessage(), e.getCause());
 					callback.onError(e.getMessage());
+				} catch (Exception e){
+					Log.e(TAG, e.getMessage(), e.getCause());
+					callback.onError(e.getMessage());
 				}
 			}
 		}.start();
@@ -150,6 +155,9 @@ public class TwitterAuth {
 					Log.e(TAG, e.getMessage(), e.getCause());
 					callback.onError(e.getMessage());
 				} catch (OAuthCommunicationException e) {
+					Log.e(TAG, e.getMessage(), e.getCause());
+					callback.onError(e.getMessage());
+				} catch (Exception e){
 					Log.e(TAG, e.getMessage(), e.getCause());
 					callback.onError(e.getMessage());
 				}
